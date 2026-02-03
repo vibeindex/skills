@@ -7,46 +7,15 @@ description: Analyze your project and get personalized recommendations for Claud
 
 Analyze your project and get personalized recommendations for Claude Code skills, MCP servers, and plugins from [Vibe Index](https://vibeindex.ai).
 
-## Prerequisites
-
-This skill requires the **Vibe Index MCP Server** with an API key.
-
-### Setup
-
-1. Get your free API key at https://vibeindex.ai/developer
-
-2. Add to your Claude Code settings (`~/.claude/settings.json`):
-
-```json
-{
-  "mcpServers": {
-    "vibeindex": {
-      "command": "npx",
-      "args": ["-y", "vibeindex-mcp"],
-      "env": {
-        "VIBE_API_KEY": "your-api-key-here"
-      }
-    }
-  }
-}
-```
-
-3. Restart Claude Code
+**No setup required!** Just install and use.
 
 ## Commands
 
 ### /vibe
-Analyze your project and recommend matching resources with detailed descriptions.
+Analyze your project and recommend matching resources.
 
 ```
 /vibe
-```
-
-### /vibe -s
-Show recommendations in a compact table format.
-
-```
-/vibe -s
 ```
 
 ### /vibe search <query>
@@ -66,11 +35,11 @@ Show top resources by stars.
 /vibe top mcp
 ```
 
-### /vibe install <name>
-Get install command for a specific resource.
+### /vibe trending
+Show trending resources this week.
 
 ```
-/vibe install github
+/vibe trending
 ```
 
 ---
@@ -99,16 +68,23 @@ Read the following files to understand the project:
 
 ### Step 2: Search for Matching Resources
 
-Use `mcp__vibeindex__search` for each detected technology:
+**Use WebFetch to call Vibe Index API directly:**
 
-| Detected | Search Query |
-|----------|--------------|
-| React | `react` |
-| TypeScript | `typescript` |
-| Supabase | `supabase` |
-| Docker | `docker` |
-| Next.js | `nextjs` |
-| Python | `python` |
+```
+WebFetch({
+  url: "https://vibeindex.ai/api/resources?search=supabase&pageSize=5",
+  prompt: "Extract resource names, types, descriptions, stars, and install commands"
+})
+```
+
+| Detected | Search URL |
+|----------|------------|
+| React | `https://vibeindex.ai/api/resources?search=react&pageSize=5` |
+| TypeScript | `https://vibeindex.ai/api/resources?search=typescript&pageSize=5` |
+| Supabase | `https://vibeindex.ai/api/resources?search=supabase&pageSize=5` |
+| Docker | `https://vibeindex.ai/api/resources?search=docker&pageSize=5` |
+| Next.js | `https://vibeindex.ai/api/resources?search=nextjs&pageSize=5` |
+| Python | `https://vibeindex.ai/api/resources?search=python&pageSize=5` |
 
 ### Step 3: Calculate Match Probability
 
@@ -128,7 +104,6 @@ Maximum: 99%
 
 ### Step 4: Present Results
 
-**Full format (`/vibe`):**
 ```markdown
 ## Suggested for Your Project
 
@@ -143,27 +118,90 @@ Based on analysis:
 
 Supabase MCP server for database operations with Row Level Security support.
 
-Stars: 6,616 | Install: See MCP config
-```
+Stars: 6,616 | Install: See https://vibeindex.ai/mcps/supabase/...
 
-**Short format (`/vibe -s`):**
-```markdown
-| Match | Name | Type | Install |
-|-------|------|------|---------|
-| 95% | supabase-mcp | mcp | See config |
-| 88% | react-best-practices | skill | `claude skill add ...` |
+---
+
+### 2. react-best-practices (skill)
+**Match: 88%** - react detected in dependencies
+
+Best practices for React development.
+
+Stars: 12,345 | Install: `npx skills add owner/repo --skill react-best-practices`
 ```
 
 ---
 
-## MCP Tools Reference
+## API Reference
 
-| Tool | Parameters |
-|------|------------|
-| `mcp__vibeindex__search` | `query`, `type?`, `limit?` |
-| `mcp__vibeindex__top` | `type?`, `limit?` |
-| `mcp__vibeindex__install` | `name`, `type?` |
+All endpoints are public and require no authentication:
+
+| Command | API Endpoint |
+|---------|-------------|
+| `/vibe search <query>` | `https://vibeindex.ai/api/resources?search={query}&pageSize=10` |
+| `/vibe top` | `https://vibeindex.ai/api/resources?sort=stars&pageSize=10` |
+| `/vibe top skill` | `https://vibeindex.ai/api/resources?sort=stars&type=skill&pageSize=10` |
+| `/vibe trending` | `https://vibeindex.ai/api/rising-stars?period=week&limit=10` |
+| `/vibe stats` | `https://vibeindex.ai/api/stats` |
+
+### Response Format
+
+The API returns JSON with this structure:
+```json
+{
+  "data": [
+    {
+      "name": "resource-name",
+      "resource_type": "skill|mcp|plugin|marketplace",
+      "description": "...",
+      "description_ko": "...",
+      "stars": 12345,
+      "github_owner": "owner",
+      "github_repo": "repo",
+      "tags": ["tag1", "tag2"]
+    }
+  ],
+  "total": 100
+}
+```
+
+### Install Commands by Type
+
+Generate install commands based on resource type:
+
+- **skill**: `npx skills add {github_owner}/{github_repo} --skill {name}`
+- **plugin**: `claude plugin add {github_owner}/{github_repo}`
+- **mcp**: Link to `https://vibeindex.ai/mcps/{github_owner}/{github_repo}/{name}`
+- **marketplace**: Link to `https://vibeindex.ai/marketplaces/{github_owner}/{github_repo}`
 
 ---
 
-Built by [Vibe Index](https://vibeindex.ai)
+## Examples
+
+### /vibe search git
+```
+WebFetch({
+  url: "https://vibeindex.ai/api/resources?search=git&pageSize=10",
+  prompt: "List the resources with name, type, description, stars. Format as markdown list."
+})
+```
+
+### /vibe top mcp
+```
+WebFetch({
+  url: "https://vibeindex.ai/api/resources?sort=stars&type=mcp&pageSize=10",
+  prompt: "List top MCP servers with name, description, stars. Format as numbered list."
+})
+```
+
+### /vibe trending
+```
+WebFetch({
+  url: "https://vibeindex.ai/api/rising-stars?period=week&limit=10",
+  prompt: "Show trending resources with star growth this week."
+})
+```
+
+---
+
+Built by [Vibe Index](https://vibeindex.ai) - The Claude Code Ecosystem Directory

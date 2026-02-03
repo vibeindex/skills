@@ -5,33 +5,9 @@ description: Compare two Claude Code resources side-by-side with objective data 
 
 # versus
 
-Compare two Claude Code resources side-by-side. Get objective data and recommendations based on your project context from [Vibe Index](https://vibeindex.ai).
+Compare two Claude Code resources side-by-side from [Vibe Index](https://vibeindex.ai).
 
-## Prerequisites
-
-This skill requires the **Vibe Index MCP Server** with an API key.
-
-### Setup
-
-1. Get your free API key at https://vibeindex.ai/developer
-
-2. Add to your Claude Code settings (`~/.claude/settings.json`):
-
-```json
-{
-  "mcpServers": {
-    "vibeindex": {
-      "command": "npx",
-      "args": ["-y", "vibeindex-mcp"],
-      "env": {
-        "VIBE_API_KEY": "your-api-key-here"
-      }
-    }
-  }
-}
-```
-
-3. Restart Claude Code
+**No setup required!** Just install and use.
 
 ## Commands
 
@@ -41,17 +17,7 @@ Compare two resources by name.
 ```
 /versus postgres-mcp supabase-mcp
 /versus react-best-practices nextjs-best-practices
-/versus github gitlab
 ```
-
----
-
-## How It Works
-
-1. Search for both resources using `mcp__vibeindex__search`
-2. Fetch detailed info for each
-3. Generate comparison table
-4. Analyze project context for recommendation
 
 ---
 
@@ -59,35 +25,27 @@ Compare two resources by name.
 
 When the user runs `/versus A B`:
 
-### Step 1: Search for Resources
+### Step 1: Search for Both Resources
 
-```javascript
-// Search for resource A
-mcp__vibeindex__search({ query: "A", limit: 1 })
+Use WebFetch to find each resource:
 
-// Search for resource B
-mcp__vibeindex__search({ query: "B", limit: 1 })
+```
+WebFetch({
+  url: "https://vibeindex.ai/api/resources?search=postgres-mcp&pageSize=3",
+  prompt: "Find the resource named postgres-mcp and extract name, type, description, stars, github_owner, github_repo"
+})
+
+WebFetch({
+  url: "https://vibeindex.ai/api/resources?search=supabase-mcp&pageSize=3",
+  prompt: "Find the resource named supabase-mcp and extract name, type, description, stars, github_owner, github_repo"
+})
 ```
 
-### Step 2: Generate Comparison
-
-Build a comparison table with:
-
-| Metric | Description |
-|--------|-------------|
-| Stars | GitHub star count |
-| Type | skill / mcp / plugin |
-| Description | What it does |
-| Key Features | Main capabilities |
-| Install | Installation command |
-
-### Step 3: Analyze Project Context
+### Step 2: Analyze Project Context (Optional)
 
 Read `package.json` and project structure to determine which resource fits better.
 
----
-
-## Output Format
+### Step 3: Generate Comparison
 
 ```markdown
 ## ⚔️ postgres-mcp vs supabase-mcp
@@ -118,38 +76,36 @@ Supabase-native with RLS, Auth, and Realtime. Best for:
 
 → **supabase-mcp** is the better fit for your project.
 
-You're already using Supabase, so the native MCP will integrate seamlessly with your existing RLS policies and auth setup.
+---
+
+**More info:**
+- https://vibeindex.ai/mcps/.../postgres-mcp
+- https://vibeindex.ai/mcps/.../supabase-mcp
+```
 
 ---
 
-**Install supabase-mcp:**
-See setup guide at https://vibeindex.ai/mcp/supabase/supabase-mcp
-```
+## API Reference
+
+| Action | API Endpoint |
+|--------|-------------|
+| Search resource | `https://vibeindex.ai/api/resources?search={name}&pageSize=3` |
 
 ---
 
 ## Edge Cases
 
-### Similar Names
-If search returns multiple matches, ask user to clarify:
-```
-Found multiple matches for "postgres":
-1. postgres-mcp (mcp)
-2. postgres-best-practices (skill)
-
-Which one did you mean?
-```
-
 ### No Match Found
 ```
 Could not find "xyz" in Vibe Index.
 Try searching: /vibe search xyz
+Or browse: https://vibeindex.ai/browse
 ```
 
 ### Same Resource
 ```
-Both names refer to the same resource: supabase-mcp
-Nothing to compare!
+Both names refer to the same resource!
+Nothing to compare.
 ```
 
 ---

@@ -5,33 +5,9 @@ description: Get a dashboard view of the Claude Code ecosystem with stats and tr
 
 # ecosystem
 
-Get a dashboard view of the Claude Code ecosystem. See total resources, category breakdown, and trends from [Vibe Index](https://vibeindex.ai).
+Get a dashboard view of the Claude Code ecosystem from [Vibe Index](https://vibeindex.ai).
 
-## Prerequisites
-
-This skill requires the **Vibe Index MCP Server** (v1.1.0+) with an API key.
-
-### Setup
-
-1. Get your free API key at https://vibeindex.ai/developer
-
-2. Add to your Claude Code settings (`~/.claude/settings.json`):
-
-```json
-{
-  "mcpServers": {
-    "vibeindex": {
-      "command": "npx",
-      "args": ["-y", "vibeindex-mcp"],
-      "env": {
-        "VIBE_API_KEY": "your-api-key-here"
-      }
-    }
-  }
-}
-```
-
-3. Restart Claude Code
+**No setup required!** Just install and use.
 
 ## Commands
 
@@ -48,31 +24,29 @@ Show full ecosystem dashboard.
 
 When the user runs `/ecosystem`:
 
-### Step 1: Gather Statistics
+### Step 1: Fetch Stats
 
-Use MCP calls in parallel:
+Use WebFetch to get ecosystem statistics:
 
-```javascript
-// Get exact counts
-mcp__vibeindex__stats()
-
-// Get top resource for each type
-mcp__vibeindex__top({ type: "skill", limit: 1 })
-mcp__vibeindex__top({ type: "mcp", limit: 1 })
-mcp__vibeindex__top({ type: "plugin", limit: 1 })
-mcp__vibeindex__top({ type: "marketplace", limit: 1 })
-
-// Get trending
-mcp__vibeindex__trending({ period: "week", limit: 3 })
+```
+WebFetch({
+  url: "https://vibeindex.ai/api/stats",
+  prompt: "Extract total, skills, plugins, mcp, and marketplaces counts"
+})
 ```
 
-### Step 2: Format Dashboard
+### Step 2: Fetch Top Resources (Optional)
 
-Combine the data into a dashboard format.
+For each type, get the #1 resource:
 
----
+```
+WebFetch({
+  url: "https://vibeindex.ai/api/resources?sort=stars&type=skill&pageSize=1",
+  prompt: "Get the top skill name and star count"
+})
+```
 
-## Output Format
+### Step 3: Format Dashboard
 
 ```markdown
 ## Claude Code Ecosystem
@@ -85,18 +59,12 @@ Combine the data into a dashboard format.
 
 | Type | Count | Top Resource |
 |------|-------|--------------|
-| Skills | [from stats] | [from top] |
-| MCP Servers | [from stats] | [from top] |
-| Plugins | [from stats] | [from top] |
-| Marketplaces | [from stats] | [from top] |
+| Skills | [from stats] | [from top query] |
+| MCP Servers | [from stats] | [from top query] |
+| Plugins | [from stats] | [from top query] |
+| Marketplaces | [from stats] | [from top query] |
 
 **Total: [from stats] resources**
-
----
-
-### Trending This Week
-
-[from trending - show top 3 with star growth]
 
 ---
 
@@ -104,7 +72,7 @@ Combine the data into a dashboard format.
 
 - Browse all: https://vibeindex.ai/browse
 - Submit resource: https://vibeindex.ai/submit
-- API docs: https://vibeindex.ai/developer
+- Explore: https://vibeindex.ai/explore
 
 ---
 
@@ -113,13 +81,15 @@ Combine the data into a dashboard format.
 
 ---
 
-## MCP Tools Reference
+## API Reference
 
-| Tool | Description |
+| Data | API Endpoint |
 |------|-------------|
-| `mcp__vibeindex__stats` | Get exact counts for all resource types |
-| `mcp__vibeindex__top` | Get top resources by stars |
-| `mcp__vibeindex__trending` | Get trending resources |
+| Stats | `https://vibeindex.ai/api/stats` |
+| Top Skills | `https://vibeindex.ai/api/resources?sort=stars&type=skill&pageSize=1` |
+| Top MCPs | `https://vibeindex.ai/api/resources?sort=stars&type=mcp&pageSize=1` |
+| Top Plugins | `https://vibeindex.ai/api/resources?sort=stars&type=plugin&pageSize=1` |
+| Trending | `https://vibeindex.ai/api/rising-stars?period=week&limit=3` |
 
 ---
 

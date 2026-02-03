@@ -5,38 +5,14 @@ description: Discover the latest Claude Code resources added to Vibe Index
 
 # new
 
-Discover the latest Claude Code resources added to [Vibe Index](https://vibeindex.ai). Stay up-to-date with new skills, MCP servers, and plugins.
+Discover the latest Claude Code resources from [Vibe Index](https://vibeindex.ai).
 
-## Prerequisites
-
-This skill requires the **Vibe Index MCP Server** with an API key.
-
-### Setup
-
-1. Get your free API key at https://vibeindex.ai/developer
-
-2. Add to your Claude Code settings (`~/.claude/settings.json`):
-
-```json
-{
-  "mcpServers": {
-    "vibeindex": {
-      "command": "npx",
-      "args": ["-y", "vibeindex-mcp"],
-      "env": {
-        "VIBE_API_KEY": "your-api-key-here"
-      }
-    }
-  }
-}
-```
-
-3. Restart Claude Code
+**No setup required!** Just install and use.
 
 ## Commands
 
 ### /new
-Show recently added resources (last 7 days).
+Show recently added resources.
 
 ```
 /new
@@ -52,84 +28,61 @@ Filter by resource type.
 ```
 
 ### /new [number]
-Show specific number of recent resources.
+Show specific number of resources.
 
 ```
 /new 20
-/new skill 10
 ```
-
----
-
-## How It Works
-
-Fetches resources from Vibe Index sorted by creation date, showing the newest additions to the ecosystem.
 
 ---
 
 ## Implementation
 
-When the user runs `/new`:
+When the user runs `/new [type] [limit]`:
 
-### API Call
+### Fetch Recent Resources
 
-Use `mcp__vibeindex__search` with empty query and sort by date:
+Use WebFetch to get recent resources:
 
-```javascript
-// Search with no query returns recent
-mcp__vibeindex__search({
-  query: "",
-  type: "all",  // or specific type
-  limit: 10
+```
+WebFetch({
+  url: "https://vibeindex.ai/api/resources?sort=newest&pageSize=10",
+  prompt: "List recently added resources with name, type, description, stars, and created date"
 })
 ```
 
-Note: Results are sorted by relevance by default. For newest resources, filter by checking recent dates or use the trending endpoint as a proxy for new popular resources.
+With type filter:
+```
+WebFetch({
+  url: "https://vibeindex.ai/api/resources?sort=newest&type=skill&pageSize=10",
+  prompt: "List recently added skills"
+})
+```
 
----
-
-## Output Format
+### Output Format
 
 ```markdown
 ## 🆕 Recently Added to Vibe Index
 
-*Last 7 days*
-
 ---
 
-### Skills (5 new)
+### Skills
 
-1. **typescript-patterns** - 2 hours ago
+1. **typescript-patterns** - Added 2 hours ago
    Advanced TypeScript patterns for Claude Code
-   ⭐ 234 | `claude skill add owner/repo/typescript-patterns`
+   ⭐ 234 | `npx skills add owner/repo --skill typescript-patterns`
 
-2. **react-hooks-guide** - 1 day ago
+2. **react-hooks-guide** - Added 1 day ago
    Comprehensive React Hooks reference
-   ⭐ 156 | `claude skill add owner/repo/react-hooks-guide`
-
-3. **python-debugging** - 2 days ago
-   Python debugging techniques and tools
-   ⭐ 89 | `claude skill add owner/repo/python-debugging`
+   ⭐ 156 | `npx skills add owner/repo --skill react-hooks-guide`
 
 ---
 
-### MCP Servers (3 new)
+### MCP Servers
 
-1. **notion-mcp** - 3 hours ago
+1. **notion-mcp** - Added 3 hours ago
    Notion API integration for Claude
-   ⭐ 567 | See MCP config
-
-2. **linear-mcp** - 1 day ago
-   Linear issue tracking integration
-   ⭐ 234 | See MCP config
-
----
-
-### Plugins (2 new)
-
-1. **test-runner** - 5 hours ago
-   Automated test execution plugin
-   ⭐ 123 | `claude plugin add owner/repo`
+   ⭐ 567 | See https://vibeindex.ai/mcps/...
 
 ---
 
@@ -139,11 +92,14 @@ Note: Results are sorted by relevance by default. For newest resources, filter b
 
 ---
 
-## Why Track New Resources?
+## API Reference
 
-- **Early adopter advantage** - Try new tools before they become mainstream
-- **Ecosystem growth** - See how fast the ecosystem is expanding
-- **Contribution ideas** - Find gaps to fill with your own resources
+| Command | API Endpoint |
+|---------|-------------|
+| `/new` | `https://vibeindex.ai/api/resources?sort=newest&pageSize=10` |
+| `/new skill` | `https://vibeindex.ai/api/resources?sort=newest&type=skill&pageSize=10` |
+| `/new mcp` | `https://vibeindex.ai/api/resources?sort=newest&type=mcp&pageSize=10` |
+| `/new 20` | `https://vibeindex.ai/api/resources?sort=newest&pageSize=20` |
 
 ---
 
