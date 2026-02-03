@@ -5,11 +5,11 @@ description: Get a dashboard view of the Claude Code ecosystem with stats and tr
 
 # ecosystem
 
-Get a dashboard view of the Claude Code ecosystem. See total resources, category breakdown, recent additions, and trends from [Vibe Index](https://vibeindex.ai).
+Get a dashboard view of the Claude Code ecosystem. See total resources, category breakdown, and trends from [Vibe Index](https://vibeindex.ai).
 
 ## Prerequisites
 
-This skill requires the **Vibe Index MCP Server** to be configured with an API key.
+This skill requires the **Vibe Index MCP Server** (v1.1.0+) to be configured with an API key.
 
 1. Get your free API key at https://vibeindex.ai/developer
 2. Add to your MCP config (see https://vibeindex.ai/tools/mcp)
@@ -25,33 +25,23 @@ Show full ecosystem dashboard.
 
 ---
 
-## How It Works
-
-Aggregates data from Vibe Index to show:
-- Total resource counts by type
-- Category distribution
-- Recent additions
-- Trending summary
-
----
-
 ## Implementation
 
 When the user runs `/ecosystem`:
 
 ### Step 1: Gather Statistics
 
-Use multiple MCP calls in parallel:
+Use MCP calls in parallel:
 
 ```javascript
-// Get top resources for counts
+// Get exact counts
+mcp__vibeindex__stats()
+
+// Get top resource for each type
 mcp__vibeindex__top({ type: "skill", limit: 1 })
 mcp__vibeindex__top({ type: "mcp", limit: 1 })
 mcp__vibeindex__top({ type: "plugin", limit: 1 })
 mcp__vibeindex__top({ type: "marketplace", limit: 1 })
-
-// Get categories
-mcp__vibeindex__categories()
 
 // Get trending
 mcp__vibeindex__trending({ period: "week", limit: 3 })
@@ -59,14 +49,16 @@ mcp__vibeindex__trending({ period: "week", limit: 3 })
 
 ### Step 2: Format Dashboard
 
+Combine the data into a dashboard format.
+
 ---
 
 ## Output Format
 
 ```markdown
-## 📊 Claude Code Ecosystem
+## Claude Code Ecosystem
 
-**Last updated:** February 2, 2025
+**Last updated:** [current date]
 
 ---
 
@@ -74,40 +66,18 @@ mcp__vibeindex__trending({ period: "week", limit: 3 })
 
 | Type | Count | Top Resource |
 |------|-------|--------------|
-| Skills | 500+ | github (118k ⭐) |
-| MCP Servers | 400+ | filesystem (77k ⭐) |
-| Plugins | 250+ | commit-commands (61k ⭐) |
-| Marketplaces | 20+ | claude-code (61k ⭐) |
+| Skills | [from stats] | [from top] |
+| MCP Servers | [from stats] | [from top] |
+| Plugins | [from stats] | [from top] |
+| Marketplaces | [from stats] | [from top] |
 
-**Total: 1,200+ resources**
-
----
-
-### 🔥 Trending This Week
-
-1. **claude-code-toolkit** (+523 ⭐)
-2. **supabase-mcp** (+312 ⭐)
-3. **cursor-rules** (+289 ⭐)
+**Total: [from stats] resources**
 
 ---
 
-### 📂 Popular Categories
+### Trending This Week
 
-| Category | Resources |
-|----------|-----------|
-| AI / LLM | 234 |
-| Database | 156 |
-| DevOps | 89 |
-| Frontend | 145 |
-| Git / GitHub | 78 |
-
----
-
-### 🆕 Recently Added
-
-- **new-skill-name** (skill) - 2 hours ago
-- **another-mcp** (mcp) - 5 hours ago
-- **cool-plugin** (plugin) - 1 day ago
+[from trending - show top 3 with star growth]
 
 ---
 
@@ -124,11 +94,13 @@ mcp__vibeindex__trending({ period: "week", limit: 3 })
 
 ---
 
-## Use Cases
+## MCP Tools Reference
 
-- **New users**: Understand the ecosystem size and scope
-- **Developers**: Find popular categories to contribute to
-- **Decision makers**: Gauge ecosystem maturity
+| Tool | Description |
+|------|-------------|
+| `mcp__vibeindex__stats` | Get exact counts for all resource types |
+| `mcp__vibeindex__top` | Get top resources by stars |
+| `mcp__vibeindex__trending` | Get trending resources |
 
 ---
 
