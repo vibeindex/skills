@@ -9,10 +9,29 @@ Get a dashboard view of the Claude Code ecosystem. See total resources, category
 
 ## Prerequisites
 
-This skill requires the **Vibe Index MCP Server** (v1.1.0+) to be configured with an API key.
+This skill requires the **Vibe Index MCP Server** (v1.1.0+) with an API key.
+
+### Setup
 
 1. Get your free API key at https://vibeindex.ai/developer
-2. Add to your MCP config (see https://vibeindex.ai/tools/mcp)
+
+2. Add to your Claude Code settings (`~/.claude/settings.json`):
+
+```json
+{
+  "mcpServers": {
+    "vibeindex": {
+      "command": "npx",
+      "args": ["-y", "vibeindex-mcp"],
+      "env": {
+        "VIBE_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+3. Restart Claude Code
 
 ## Commands
 
