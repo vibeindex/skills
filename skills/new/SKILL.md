@@ -1,3 +1,8 @@
+---
+name: new
+description: Discover the latest Claude Code resources added to Vibe Index
+---
+
 # new
 
 Discover the latest Claude Code resources added to [Vibe Index](https://vibeindex.ai). Stay up-to-date with new skills, MCP servers, and plugins.

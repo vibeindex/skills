@@ -1,3 +1,8 @@
+---
+name: rising
+description: Discover trending Claude Code resources that are rising on GitHub right now
+---
+
 # rising
 
 Discover trending Claude Code resources that are rising on GitHub right now. Shows resources from [Vibe Index](https://vibeindex.ai) that are currently trending on GitHub.

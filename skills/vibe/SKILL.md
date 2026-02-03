@@ -1,3 +1,8 @@
+---
+name: vibe
+description: Analyze your project and get personalized recommendations for Claude Code skills, MCP servers, and plugins
+---
+
 # vibe
 
 Analyze your project and get personalized recommendations for Claude Code skills, MCP servers, and plugins from [Vibe Index](https://vibeindex.ai).

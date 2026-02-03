@@ -1,3 +1,8 @@
+---
+name: versus
+description: Compare two Claude Code resources side-by-side with objective data and recommendations
+---
+
 # versus
 
 Compare two Claude Code resources side-by-side. Get objective data and recommendations based on your project context from [Vibe Index](https://vibeindex.ai).

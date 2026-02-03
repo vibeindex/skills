@@ -1,3 +1,8 @@
+---
+name: ecosystem
+description: Get a dashboard view of the Claude Code ecosystem with stats and trends
+---
+
 # ecosystem
 
 Get a dashboard view of the Claude Code ecosystem. See total resources, category breakdown, recent additions, and trends from [Vibe Index](https://vibeindex.ai).
