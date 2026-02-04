@@ -73,7 +73,7 @@ Comprehensive toolkit for Claude Code development
 ### #2 supabase-mcp (mcp)
 **+312 stars this week** | Total: 6,616 ⭐
 Supabase MCP server with RLS support
-→ See https://vibeindex.ai/mcps/supabase/...
+→ See https://vibeindex.ai/mcp/supabase/supabase-community/supabase-mcp
 
 ---
 
