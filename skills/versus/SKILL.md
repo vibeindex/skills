@@ -79,8 +79,8 @@ Supabase-native with RLS, Auth, and Realtime. Best for:
 ---
 
 **More info:**
-- https://vibeindex.ai/mcps/.../postgres-mcp
-- https://vibeindex.ai/mcps/.../supabase-mcp
+- https://vibeindex.ai/mcp/crystaldba/postgres-mcp/postgres-mcp
+- https://vibeindex.ai/mcp/supabase/supabase-community/supabase-mcp
 ```
 
 ---
