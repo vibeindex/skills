@@ -118,7 +118,7 @@ Based on analysis:
 
 Supabase MCP server for database operations with Row Level Security support.
 
-Stars: 6,616 | Install: See https://vibeindex.ai/mcps/supabase/...
+Stars: 6,616 | Install: See https://vibeindex.ai/mcp/supabase/supabase-community/supabase-mcp
 
 ---
 
@@ -170,8 +170,8 @@ The API returns JSON with this structure:
 Generate install commands based on resource type:
 
 - **skill**: `npx skills add {github_owner}/{github_repo} --skill {name}`
-- **plugin**: `claude plugin add {github_owner}/{github_repo}`
-- **mcp**: Link to `https://vibeindex.ai/mcps/{github_owner}/{github_repo}/{name}`
+- **plugin**: Link to `https://vibeindex.ai/plugins/{github_owner}/{github_repo}/{name}`
+- **mcp**: Link to `https://vibeindex.ai/mcp/{github_owner}/{github_repo}/{name}`
 - **marketplace**: Link to `https://vibeindex.ai/marketplaces/{github_owner}/{github_repo}`
 
 ---
