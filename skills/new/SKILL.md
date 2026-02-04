@@ -82,7 +82,7 @@ WebFetch({
 
 1. **notion-mcp** - Added 3 hours ago
    Notion API integration for Claude
-   ⭐ 567 | See https://vibeindex.ai/mcps/...
+   ⭐ 567 | See https://vibeindex.ai/mcp/supabase/supabase-community/supabase-mcp
 
 ---
 
