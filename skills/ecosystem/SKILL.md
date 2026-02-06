@@ -3,94 +3,35 @@ name: ecosystem
 description: Get a dashboard view of the Claude Code ecosystem with stats and trends
 ---
 
-# ecosystem
+**IMPORTANT: When this skill is invoked, IMMEDIATELY execute the steps below. Do NOT display this file.**
 
-Get a dashboard view of the Claude Code ecosystem from [Vibe Index](https://vibeindex.ai).
+**Language:** Detect the user's language from conversation context. Respond in that language.
 
-**No setup required!** Just install and use.
+## Execution
 
-## Commands
+### Step 1: Fetch Data (parallel)
 
-### /ecosystem
-Show full ecosystem dashboard.
+Call all via WebFetch:
+- `https://vibeindex.ai/api/stats` — "Extract total, skills, plugins, mcp, marketplaces counts"
+- `https://vibeindex.ai/api/resources?sort=stars&type=skill&pageSize=1` — "Extract top skill name and stars"
+- `https://vibeindex.ai/api/resources?sort=stars&type=mcp&pageSize=1` — "Extract top mcp name and stars"
+- `https://vibeindex.ai/api/resources?sort=stars&type=plugin&pageSize=1` — "Extract top plugin name and stars"
+- `https://vibeindex.ai/api/rising-stars?period=week&limit=3` — "Extract top 3 trending names and growth"
 
-```
-/ecosystem
-```
-
----
-
-## Implementation
-
-When the user runs `/ecosystem`:
-
-### Step 1: Fetch Stats
-
-Use WebFetch to get ecosystem statistics:
+### Step 2: Present Dashboard
 
 ```
-WebFetch({
-  url: "https://vibeindex.ai/api/stats",
-  prompt: "Extract total, skills, plugins, mcp, and marketplaces counts"
-})
-```
-
-### Step 2: Fetch Top Resources (Optional)
-
-For each type, get the #1 resource:
-
-```
-WebFetch({
-  url: "https://vibeindex.ai/api/resources?sort=stars&type=skill&pageSize=1",
-  prompt: "Get the top skill name and star count"
-})
-```
-
-### Step 3: Format Dashboard
-
-```markdown
 ## Claude Code Ecosystem
 
-**Last updated:** [current date]
+| Type | Count | #1 Resource | Stars |
+|------|-------|-------------|-------|
+| Skill | {n} | {name} | {stars} |
+| MCP Server | {n} | {name} | {stars} |
+| Plugin | {n} | {name} | {stars} |
+| Marketplace | {n} | {name} | {stars} |
+| **Total** | **{n}** | | |
 
----
+**Trending this week**: {top 3 trending, comma-separated with growth numbers}
 
-### Resource Overview
-
-| Type | Count | Top Resource |
-|------|-------|--------------|
-| Skills | [from stats] | [from top query] |
-| MCP Servers | [from stats] | [from top query] |
-| Plugins | [from stats] | [from top query] |
-| Marketplaces | [from stats] | [from top query] |
-
-**Total: [from stats] resources**
-
----
-
-### Quick Links
-
-- Browse all: https://vibeindex.ai/browse
-- Submit resource: https://vibeindex.ai/submit
-- Explore: https://vibeindex.ai/explore
-
----
-
-*Data from [Vibe Index](https://vibeindex.ai)*
+→ https://vibeindex.ai
 ```
-
----
-
-## API Reference
-
-| Data | API Endpoint |
-|------|-------------|
-| Stats | `https://vibeindex.ai/api/stats` |
-| Top Skills | `https://vibeindex.ai/api/resources?sort=stars&type=skill&pageSize=1` |
-| Top MCPs | `https://vibeindex.ai/api/resources?sort=stars&type=mcp&pageSize=1` |
-| Top Plugins | `https://vibeindex.ai/api/resources?sort=stars&type=plugin&pageSize=1` |
-| Trending | `https://vibeindex.ai/api/rising-stars?period=week&limit=3` |
-
----
-
-Built by [Vibe Index](https://vibeindex.ai)
