@@ -85,7 +85,7 @@ Output ONLY the result below (nothing else before it). Use a warm, conversationa
 
 Here are the best matches for your stack:
 
----
+────────────────────────────────────────
 
 **1. {name}** `{resource_type}` · ⭐ {stars}
 > {description}
@@ -96,12 +96,12 @@ Here are the best matches for your stack:
 {install_command}
 ```
 
----
+────────────────────────────────────────
 
 **2. {name}** `{resource_type}` · ⭐ {stars}
 ...
 
----
+────────────────────────────────────────
 
 ## Install
 
