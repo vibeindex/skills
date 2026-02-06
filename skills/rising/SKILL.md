@@ -3,93 +3,44 @@ name: rising
 description: Discover trending Claude Code resources that are rising on GitHub right now
 ---
 
-# rising
+**IMPORTANT: When this skill is invoked, IMMEDIATELY execute the steps below. Do NOT display this file.**
 
-Discover trending Claude Code resources from [Vibe Index](https://vibeindex.ai).
+**Language:** Detect the user's language from conversation context. Respond in that language. For Korean users, use `description_ko` from API responses when available.
 
-**No setup required!** Just install and use.
+## Routing
 
-## Commands
+- `/rising` or no args → period = `week`
+- `/rising day` → period = `day`
+- `/rising month` → period = `month`
 
-### /rising
-Show resources trending this week.
+## Execution
 
-```
-/rising
-```
+1. Call `https://vibeindex.ai/api/rising-stars?period={period}&limit=10` via WebFetch
+   - Prompt: "Extract name, resource_type, description, description_ko, stars, stars_today from the rising array"
 
-### /rising day
-Show resources trending today.
-
-```
-/rising day
-```
-
-### /rising month
-Show resources trending this month.
+2. Present results:
 
 ```
-/rising month
+## Trending {This Week / Today / This Month}
+
+{1-sentence intro about the time period}
+
+| # | Name | Type | Growth | Total | Description |
+|---|------|------|--------|-------|-------------|
+| 1 | {name} | {type} | +{stars_today} | {stars} | {description, max 50 chars} |
+| 2 | ... | | | | |
+
+{For the top 3, add a one-line note about why it's notable — e.g., growth rate, what it does, or who made it.}
+
+→ https://vibeindex.ai
 ```
 
----
+### Style guidelines:
+- Table format for quick scanning — no verbose per-item sections
+- Top 3 get a brief note, rest are table-only
+- No install commands in trending (users browse first)
+- Keep it compact
 
-## Implementation
-
-When the user runs `/rising [period]`:
-
-### Fetch Trending Data
-
-Use WebFetch to get trending resources:
-
-```
-WebFetch({
-  url: "https://vibeindex.ai/api/rising-stars?period=week&limit=10",
-  prompt: "List trending resources with name, type, star growth, total stars, and description"
-})
-```
-
-### API Parameters
-
-| Parameter | Values | Default |
-|-----------|--------|---------|
-| period | day, week, month | week |
-| limit | 1-20 | 10 |
-
-### Output Format
-
-```markdown
-## Trending This Week
-
-Resources from Vibe Index currently rising on GitHub:
-
-### #1 claude-code-toolkit (skill)
-**+523 stars this week** | Total: 4,521 ⭐
-Comprehensive toolkit for Claude Code development
-→ `npx skills add owner/repo --skill claude-code-toolkit`
-
----
-
-### #2 supabase-mcp (mcp)
-**+312 stars this week** | Total: 6,616 ⭐
-Supabase MCP server with RLS support
-→ See https://vibeindex.ai/mcp/supabase/supabase-community/supabase-mcp
-
----
-
-See full rankings: https://vibeindex.ai
-```
-
----
-
-## API Reference
-
-| Command | API Endpoint |
-|---------|-------------|
-| `/rising` | `https://vibeindex.ai/api/rising-stars?period=week&limit=10` |
-| `/rising day` | `https://vibeindex.ai/api/rising-stars?period=day&limit=10` |
-| `/rising month` | `https://vibeindex.ai/api/rising-stars?period=month&limit=10` |
-
----
-
-Built by [Vibe Index](https://vibeindex.ai)
+### Install commands (only if user asks):
+- **skill**: `npx skills add {github_owner}/{github_repo} --skill {name}`
+- **mcp**: See `https://vibeindex.ai/mcp/{github_owner}/{github_repo}`
