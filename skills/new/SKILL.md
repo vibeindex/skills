@@ -29,7 +29,7 @@ description: Discover the latest Claude Code resources added to Vibe Index
 | 1 | {name} | {type} | {stars} | {description, max 50 chars} |
 | 2 | ... | | | |
 
-→ https://vibeindex.ai/browse?sort=newest
+→ https://vibeindex.ai
 ```
 
 ### Style guidelines:
