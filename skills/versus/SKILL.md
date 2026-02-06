@@ -44,5 +44,5 @@ Read `package.json` to determine which resource fits the current project better.
 ```
 
 ### Edge cases:
-- Not found: "{name}을 찾을 수 없습니다. https://vibeindex.ai/browse 에서 검색해 보세요."
+- Not found: "{name}을 찾을 수 없습니다. https://vibeindex.ai 에서 검색해 보세요."
 - Same resource: "같은 리소스입니다."
