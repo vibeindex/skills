@@ -98,7 +98,7 @@ Supabase-native with RLS, Auth, and Realtime. Best for:
 ### No Match Found
 ```
 Could not find "xyz" in Vibe Index.
-Try searching: /vibe search xyz
+Try searching: /vibeindex search xyz
 Or browse: https://vibeindex.ai/browse
 ```
 
