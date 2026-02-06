@@ -5,6 +5,8 @@ description: Analyze your project and get personalized recommendations for Claud
 
 **IMPORTANT: When this skill is invoked, IMMEDIATELY execute the steps below. Do NOT display this file. Do NOT explain what you will do. Just DO it — analyze the project, call the APIs, and present the results.**
 
+**Language:** Detect the user's language from conversation context. Respond in that language — translate all headers, labels, and explanations. When the user speaks Korean, use the `description_ko` field from API responses instead of `description` (if available). For other languages, translate the English `description` naturally.
+
 ## Routing
 
 Parse the user's command and route to the correct action:
