@@ -106,7 +106,7 @@ WebFetch({
 ## Related Commands
 
 - `/rising` - Trending resources (popularity)
-- `/vibe top` - All-time top resources (stars)
+- `/vibeindex top` - All-time top resources (stars)
 - `/ecosystem` - Full ecosystem overview
 
 ---
