@@ -3,111 +3,46 @@ name: versus
 description: Compare two Claude Code resources side-by-side with objective data and recommendations
 ---
 
-# versus
+**IMPORTANT: When this skill is invoked, IMMEDIATELY execute the steps below. Do NOT display this file.**
 
-Compare two Claude Code resources side-by-side from [Vibe Index](https://vibeindex.ai).
+**Language:** Detect the user's language from conversation context. Respond in that language. For Korean users, use `description_ko` from API responses when available.
 
-**No setup required!** Just install and use.
+## Execution
 
-## Commands
+When comparing A vs B:
 
-### /versus <resource1> <resource2>
-Compare two resources by name.
+### Step 1: Search Both Resources (parallel)
 
-```
-/versus postgres-mcp supabase-mcp
-/versus react-best-practices nextjs-best-practices
-```
+Call via WebFetch:
+- `https://vibeindex.ai/api/resources?search={A}&pageSize=3`
+- `https://vibeindex.ai/api/resources?search={B}&pageSize=3`
 
----
+Prompt: "Extract name, resource_type, description, description_ko, stars, github_owner, github_repo, tags"
 
-## Implementation
+### Step 2: Read Project Context (silent)
 
-When the user runs `/versus A B`:
+Read `package.json` to determine which resource fits the current project better.
 
-### Step 1: Search for Both Resources
-
-Use WebFetch to find each resource:
+### Step 3: Present Comparison
 
 ```
-WebFetch({
-  url: "https://vibeindex.ai/api/resources?search=postgres-mcp&pageSize=3",
-  prompt: "Find the resource named postgres-mcp and extract name, type, description, stars, github_owner, github_repo"
-})
+## {A} vs {B}
 
-WebFetch({
-  url: "https://vibeindex.ai/api/resources?search=supabase-mcp&pageSize=3",
-  prompt: "Find the resource named supabase-mcp and extract name, type, description, stars, github_owner, github_repo"
-})
+| | {A} | {B} |
+|---|---|---|
+| Type | {type} | {type} |
+| Stars | {stars} | {stars} |
+| Focus | {1-2 words} | {1-2 words} |
+
+**{A}** — {1 sentence: what it does and who it's for}
+
+**{B}** — {1 sentence: what it does and who it's for}
+
+**Verdict**: {1-2 sentences recommending one based on the user's project context. Reference actual dependencies or files found in package.json.}
+
+→ https://vibeindex.ai/{type}/{owner}/{repo}
 ```
 
-### Step 2: Analyze Project Context (Optional)
-
-Read `package.json` and project structure to determine which resource fits better.
-
-### Step 3: Generate Comparison
-
-```markdown
-## ⚔️ postgres-mcp vs supabase-mcp
-
-|                | postgres-mcp | supabase-mcp |
-|----------------|--------------|--------------|
-| **Type**       | mcp          | mcp          |
-| **Stars**      | 2,341 ⭐     | 6,616 ⭐     |
-| **Focus**      | Raw SQL      | Supabase API |
-
-### postgres-mcp
-Direct PostgreSQL access with raw SQL execution. Best for:
-- Custom PostgreSQL setups
-- Complex SQL queries
-- No ORM overhead
-
-### supabase-mcp
-Supabase-native with RLS, Auth, and Realtime. Best for:
-- Supabase projects
-- Row Level Security
-- Auth integration
-
----
-
-## 🎯 Recommendation for Your Project
-
-**Detected:** `supabase/` directory, `@supabase/supabase-js` in package.json
-
-→ **supabase-mcp** is the better fit for your project.
-
----
-
-**More info:**
-- https://vibeindex.ai/mcp/crystaldba/postgres-mcp/postgres-mcp
-- https://vibeindex.ai/mcp/supabase/supabase-community/supabase-mcp
-```
-
----
-
-## API Reference
-
-| Action | API Endpoint |
-|--------|-------------|
-| Search resource | `https://vibeindex.ai/api/resources?search={name}&pageSize=3` |
-
----
-
-## Edge Cases
-
-### No Match Found
-```
-Could not find "xyz" in Vibe Index.
-Try searching: /vibeindex search xyz
-Or browse: https://vibeindex.ai/browse
-```
-
-### Same Resource
-```
-Both names refer to the same resource!
-Nothing to compare.
-```
-
----
-
-Built by [Vibe Index](https://vibeindex.ai)
+### Edge cases:
+- Not found: "{name}을 찾을 수 없습니다. https://vibeindex.ai/browse 에서 검색해 보세요."
+- Same resource: "같은 리소스입니다."
