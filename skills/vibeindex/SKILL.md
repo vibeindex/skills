@@ -75,39 +75,53 @@ Deduplicate results across all searches. Pick the top 5 highest-scoring resource
 
 ## Step 4: Present Results
 
-Output ONLY this format (nothing else before it):
+Output ONLY the result below (nothing else before it). Use a warm, conversational tone — like a knowledgeable colleague giving advice. Adapt the language to the user's language detected earlier.
 
 ```
-## Suggested for {project-name}
+## {project-name} 프로젝트를 분석했어요
 
-Based on analysis:
-- Framework: {detected frameworks}
-- Database: {detected database, if any}
-- Styling: {detected styling, if any}
+{project-name}은 **{main framework}** 기반 프로젝트네요.
+{Describe what you found in 1-2 natural sentences — mention key technologies, database, styling, etc. Be specific about versions when available.}
 
----
-
-### 1. {name} ({resource_type})
-**Match: {score}%** — {why it matched}
-
-{description}
-
-Stars: {stars} | Install: {install_command}
+이 스택에 딱 맞는 리소스를 찾았습니다:
 
 ---
 
-### 2. {name} ({resource_type})
+**1. {name}** `{resource_type}` · ⭐ {stars}
+> {description}
+
+📌 **추천 이유**: {Write 1-2 sentences explaining WHY this resource is useful for THIS specific project. Reference the actual dependencies or files you found. e.g., "package.json에 @supabase/supabase-js가 있고, supabase/ 디렉토리에 19개 SQL 파일이 있어서 Supabase를 적극 활용하고 계시네요. 이 스킬이 RLS 정책이나 쿼리 최적화에 도움이 됩니다."}
+
+```
+{install_command}
+```
+
+---
+
+**2. {name}** `{resource_type}` · ⭐ {stars}
 ...
 
 ---
 
-**Quick Install:**
-{install commands for all recommended resources, one per line}
+## 설치하기
 
-**Browse more:** https://vibeindex.ai/browse
+위 리소스 중 필요한 것을 바로 설치할 수 있습니다:
+
+```
+{install commands, one per line, only for skills — plugins/mcp show URLs instead}
 ```
 
-Install commands by type:
+💡 **더 많은 리소스 둘러보기** → https://vibeindex.ai/browse
+```
+
+### Writing style guidelines:
+- **Be specific**: Reference actual files, dependencies, and counts you found during analysis (e.g., ".tsx 파일 75개", "supabase/ 디렉토리", "react 19.2.3")
+- **Be helpful**: Explain what each resource actually does for the user, not just what it is
+- **Be concise**: Each recommendation reason should be 1-2 sentences max
+- **Match score**: Show the match % in the recommendation reason naturally (e.g., "95% 일치") rather than as a separate bold line
+- **No jargon dumps**: Don't list raw field names or technical metadata
+
+### Install commands by type:
 - **skill**: `npx skills add {github_owner}/{github_repo} --skill {name}`
 - **plugin**: See `https://vibeindex.ai/plugins/{github_owner}/{github_repo}/{name}`
 - **mcp**: See `https://vibeindex.ai/mcp/{github_owner}/{github_repo}`
