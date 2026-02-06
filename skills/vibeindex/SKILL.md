@@ -111,7 +111,7 @@ Copy and run the commands you need:
 {install commands, one per line, only for skills — plugins/mcp show URLs instead}
 ```
 
-💡 **Browse more** → https://vibeindex.ai/browse
+💡 **Browse more** → https://vibeindex.ai
 ```
 
 ### Writing style guidelines:
