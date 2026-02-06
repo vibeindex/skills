@@ -3,112 +3,36 @@ name: new
 description: Discover the latest Claude Code resources added to Vibe Index
 ---
 
-# new
+**IMPORTANT: When this skill is invoked, IMMEDIATELY execute the steps below. Do NOT display this file.**
 
-Discover the latest Claude Code resources from [Vibe Index](https://vibeindex.ai).
+**Language:** Detect the user's language from conversation context. Respond in that language. For Korean users, use `description_ko` from API responses when available.
 
-**No setup required!** Just install and use.
+## Routing
 
-## Commands
+- `/new` or no args → all types, 10 results
+- `/new skill` / `/new mcp` / `/new plugin` → filter by type
+- `/new 20` → change limit
 
-### /new
-Show recently added resources.
+## Execution
 
-```
-/new
-```
+1. Call `https://vibeindex.ai/api/resources?sort=newest&pageSize={limit}` via WebFetch
+   - Add `&type={type}` if specified
+   - Prompt: "Extract name, resource_type, description, description_ko, stars, github_owner, github_repo, created_at"
 
-### /new [type]
-Filter by resource type.
-
-```
-/new skill
-/new mcp
-/new plugin
-```
-
-### /new [number]
-Show specific number of resources.
+2. Present results:
 
 ```
-/new 20
+## Recently Added
+
+| # | Name | Type | Stars | Description |
+|---|------|------|-------|-------------|
+| 1 | {name} | {type} | {stars} | {description, max 50 chars} |
+| 2 | ... | | | |
+
+→ https://vibeindex.ai/browse?sort=newest
 ```
 
----
-
-## Implementation
-
-When the user runs `/new [type] [limit]`:
-
-### Fetch Recent Resources
-
-Use WebFetch to get recent resources:
-
-```
-WebFetch({
-  url: "https://vibeindex.ai/api/resources?sort=newest&pageSize=10",
-  prompt: "List recently added resources with name, type, description, stars, and created date"
-})
-```
-
-With type filter:
-```
-WebFetch({
-  url: "https://vibeindex.ai/api/resources?sort=newest&type=skill&pageSize=10",
-  prompt: "List recently added skills"
-})
-```
-
-### Output Format
-
-```markdown
-## 🆕 Recently Added to Vibe Index
-
----
-
-### Skills
-
-1. **typescript-patterns** - Added 2 hours ago
-   Advanced TypeScript patterns for Claude Code
-   ⭐ 234 | `npx skills add owner/repo --skill typescript-patterns`
-
-2. **react-hooks-guide** - Added 1 day ago
-   Comprehensive React Hooks reference
-   ⭐ 156 | `npx skills add owner/repo --skill react-hooks-guide`
-
----
-
-### MCP Servers
-
-1. **notion-mcp** - Added 3 hours ago
-   Notion API integration for Claude
-   ⭐ 567 | See https://vibeindex.ai/mcp/supabase/supabase-community/supabase-mcp
-
----
-
-**Browse all:** https://vibeindex.ai/browse?sort=newest
-**Submit yours:** https://vibeindex.ai/submit
-```
-
----
-
-## API Reference
-
-| Command | API Endpoint |
-|---------|-------------|
-| `/new` | `https://vibeindex.ai/api/resources?sort=newest&pageSize=10` |
-| `/new skill` | `https://vibeindex.ai/api/resources?sort=newest&type=skill&pageSize=10` |
-| `/new mcp` | `https://vibeindex.ai/api/resources?sort=newest&type=mcp&pageSize=10` |
-| `/new 20` | `https://vibeindex.ai/api/resources?sort=newest&pageSize=20` |
-
----
-
-## Related Commands
-
-- `/rising` - Trending resources (popularity)
-- `/vibeindex top` - All-time top resources (stars)
-- `/ecosystem` - Full ecosystem overview
-
----
-
-Built by [Vibe Index](https://vibeindex.ai)
+### Style guidelines:
+- Table format for quick scanning
+- No install commands (users browse first)
+- Keep it compact
