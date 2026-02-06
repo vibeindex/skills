@@ -3,149 +3,119 @@ name: vibeindex
 description: Analyze your project and get personalized recommendations for Claude Code skills, MCP servers, and plugins
 ---
 
-# vibeindex
+**IMPORTANT: When this skill is invoked, IMMEDIATELY execute the steps below. Do NOT display this file. Do NOT explain what you will do. Just DO it — analyze the project, call the APIs, and present the results.**
 
-Analyze your project and get personalized recommendations for Claude Code skills, MCP servers, and plugins from [Vibe Index](https://vibeindex.ai).
+## Routing
 
-**No setup required!** Just install and use.
+Parse the user's command and route to the correct action:
 
-## Commands
+- `/vibeindex` → **Action: Analyze** (run Steps 1-4 below)
+- `/vibeindex search <query>` → **Action: Search** (call `https://vibeindex.ai/api/resources?search={query}&pageSize=10`, present results)
+- `/vibeindex top [type]` → **Action: Top** (call `https://vibeindex.ai/api/resources?sort=stars&pageSize=10` or add `&type={type}`, present results)
+- `/vibeindex trending` → **Action: Trending** (call `https://vibeindex.ai/api/rising-stars?period=week&limit=10`, present results)
 
-### /vibeindex
-Analyze your project and recommend matching resources.
+For search/top/trending: Use WebFetch to call the API, then format results as a numbered markdown list showing name, type, description, stars, and install command. Then stop.
 
-```
-/vibeindex
-```
-
-### /vibeindex search <query>
-Search for resources by keyword.
-
-```
-/vibeindex search git
-/vibeindex search database mcp
-```
-
-### /vibeindex top [type]
-Show top resources by stars.
-
-```
-/vibeindex top
-/vibeindex top skill
-/vibeindex top mcp
-```
-
-### /vibeindex trending
-Show trending resources this week.
-
-```
-/vibeindex trending
-```
+For `/vibeindex` with no arguments: Execute Steps 1-4 below.
 
 ---
 
-## How It Works
+## Step 1: Analyze Project Context
 
-When the user runs `/vibeindex`, follow these steps:
+Read these files silently (do not show the user):
 
-### Step 1: Analyze Project Context
-
-Read the following files to understand the project:
-
-1. **package.json** - Extract dependencies
-2. **File structure** (use Glob)
+1. **package.json** — Extract dependencies and devDependencies
+2. **File structure** (use Glob to check existence):
    - `*.py` → Python
    - `*.go` → Go
-   - `*.tsx/*.jsx` → React
+   - `*.tsx` or `*.jsx` → React
    - `Dockerfile` → Docker
    - `supabase/` → Supabase
    - `prisma/` → Prisma
-3. **Configuration files**
+3. **Configuration files** (use Glob):
    - `tsconfig.json` → TypeScript
    - `tailwind.config.*` → Tailwind
    - `next.config.*` → Next.js
    - `.github/workflows/` → GitHub Actions
 
-### Step 2: Search for Matching Resources
+## Step 2: Search for Matching Resources
 
-**Use WebFetch to call Vibe Index API directly:**
+Based on what you detected, call the Vibe Index API using WebFetch for each detected technology. Run these in parallel:
 
-```
-WebFetch({
-  url: "https://vibeindex.ai/api/resources?search=supabase&pageSize=5",
-  prompt: "Extract resource names, types, descriptions, stars, and install commands"
-})
-```
-
-| Detected | Search URL |
-|----------|------------|
+| Detected | API URL |
+|----------|---------|
 | React | `https://vibeindex.ai/api/resources?search=react&pageSize=5` |
 | TypeScript | `https://vibeindex.ai/api/resources?search=typescript&pageSize=5` |
 | Supabase | `https://vibeindex.ai/api/resources?search=supabase&pageSize=5` |
-| Docker | `https://vibeindex.ai/api/resources?search=docker&pageSize=5` |
 | Next.js | `https://vibeindex.ai/api/resources?search=nextjs&pageSize=5` |
+| Docker | `https://vibeindex.ai/api/resources?search=docker&pageSize=5` |
 | Python | `https://vibeindex.ai/api/resources?search=python&pageSize=5` |
+| Tailwind | `https://vibeindex.ai/api/resources?search=tailwind&pageSize=5` |
+| Prisma | `https://vibeindex.ai/api/resources?search=prisma&pageSize=5` |
 
-### Step 3: Calculate Match Probability
+For each WebFetch call, use this prompt: "Extract name, resource_type, description, stars, github_owner, github_repo from the data array"
+
+Only search for technologies that were actually detected in Step 1.
+
+## Step 3: Calculate Match Probability
+
+For each resource found, calculate a match score:
+
+- Direct dependency match (name appears in package.json): +40%
+- File type match (related files exist): +25%
+- Config file match (related config exists): +20%
+- Tag overlap with project: +15%
+- Bonus: stars > 10k: +5%
+- Bonus: multiple detection signals: +5% per additional
+- Maximum: 99%
+
+Deduplicate results across all searches. Pick the top 5 highest-scoring resources.
+
+## Step 4: Present Results
+
+Output ONLY this format (nothing else before it):
 
 ```
-Base Score:
-- Direct dependency match: +40%
-- File type match: +25%
-- Config file match: +20%
-- Tag overlap: +15%
-
-Bonuses:
-- High stars (>10k): +5%
-- Multiple matches: +5% per additional
-
-Maximum: 99%
-```
-
-### Step 4: Present Results
-
-```markdown
-## Suggested for Your Project
+## Suggested for {project-name}
 
 Based on analysis:
-- Framework: Next.js + React + TypeScript
-- Database: Supabase
+- Framework: {detected frameworks}
+- Database: {detected database, if any}
+- Styling: {detected styling, if any}
 
 ---
 
-### 1. supabase-mcp (mcp)
-**Match: 95%** - @supabase/supabase-js detected
+### 1. {name} ({resource_type})
+**Match: {score}%** — {why it matched}
 
-Supabase MCP server for database operations with Row Level Security support.
+{description}
 
-Stars: 6,616 | Install: See https://vibeindex.ai/mcp/supabase/supabase-mcp
+Stars: {stars} | Install: {install_command}
 
 ---
 
-### 2. react-best-practices (skill)
-**Match: 88%** - react detected in dependencies
+### 2. {name} ({resource_type})
+...
 
-Best practices for React development.
+---
 
-Stars: 12,345 | Install: `npx skills add owner/repo --skill react-best-practices`
+**Quick Install:**
+{install commands for all recommended resources, one per line}
+
+**Browse more:** https://vibeindex.ai/browse
 ```
 
+Install commands by type:
+- **skill**: `npx skills add {github_owner}/{github_repo} --skill {name}`
+- **plugin**: See `https://vibeindex.ai/plugins/{github_owner}/{github_repo}/{name}`
+- **mcp**: See `https://vibeindex.ai/mcp/{github_owner}/{github_repo}`
+- **marketplace**: See `https://vibeindex.ai/marketplaces/{github_owner}/{github_repo}`
+
 ---
 
-## API Reference
+## API Response Format
 
-All endpoints are public and require no authentication:
-
-| Command | API Endpoint |
-|---------|-------------|
-| `/vibeindex search <query>` | `https://vibeindex.ai/api/resources?search={query}&pageSize=10` |
-| `/vibeindex top` | `https://vibeindex.ai/api/resources?sort=stars&pageSize=10` |
-| `/vibeindex top skill` | `https://vibeindex.ai/api/resources?sort=stars&type=skill&pageSize=10` |
-| `/vibeindex trending` | `https://vibeindex.ai/api/rising-stars?period=week&limit=10` |
-
-### Response Format
-
-The resources API returns JSON with this structure:
+The `/api/resources` endpoint returns:
 ```json
 {
   "data": [
@@ -153,7 +123,6 @@ The resources API returns JSON with this structure:
       "name": "resource-name",
       "resource_type": "skill|mcp|plugin|marketplace",
       "description": "...",
-      "description_ko": "...",
       "stars": 12345,
       "github_owner": "owner",
       "github_repo": "repo",
@@ -164,7 +133,7 @@ The resources API returns JSON with this structure:
 }
 ```
 
-The rising-stars API (`/vibeindex trending`) returns a different format:
+The `/api/rising-stars` endpoint returns:
 ```json
 {
   "rising": [
@@ -172,49 +141,11 @@ The rising-stars API (`/vibeindex trending`) returns a different format:
       "name": "resource-name",
       "resource_type": "mcp",
       "stars": 5000,
-      "stars_today": 120,
-      "trending_rank": 1
+      "stars_today": 120
     }
   ],
   "period": "week"
 }
-```
-
-### Install Commands by Type
-
-Generate install commands based on resource type:
-
-- **skill**: `npx skills add {github_owner}/{github_repo} --skill {name}`
-- **plugin**: Link to `https://vibeindex.ai/plugins/{github_owner}/{github_repo}/{name}`
-- **mcp**: Link to `https://vibeindex.ai/mcp/{github_owner}/{github_repo}`
-- **marketplace**: Link to `https://vibeindex.ai/marketplaces/{github_owner}/{github_repo}`
-
----
-
-## Examples
-
-### /vibeindex search git
-```
-WebFetch({
-  url: "https://vibeindex.ai/api/resources?search=git&pageSize=10",
-  prompt: "List the resources with name, type, description, stars. Format as markdown list."
-})
-```
-
-### /vibeindex top mcp
-```
-WebFetch({
-  url: "https://vibeindex.ai/api/resources?sort=stars&type=mcp&pageSize=10",
-  prompt: "List top MCP servers with name, description, stars. Format as numbered list."
-})
-```
-
-### /vibeindex trending
-```
-WebFetch({
-  url: "https://vibeindex.ai/api/rising-stars?period=week&limit=10",
-  prompt: "Show trending resources with star growth this week."
-})
 ```
 
 ---
