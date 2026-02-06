@@ -75,22 +75,22 @@ Deduplicate results across all searches. Pick the top 5 highest-scoring resource
 
 ## Step 4: Present Results
 
-Output ONLY the result below (nothing else before it). Use a warm, conversational tone — like a knowledgeable colleague giving advice. Adapt the language to the user's language detected earlier.
+Output ONLY the result below (nothing else before it). Use a warm, conversational tone — like a knowledgeable colleague giving advice. Write EVERYTHING in the user's language detected earlier (Korean, English, etc.). Translate all headers, labels, descriptions, and explanations.
 
 ```
-## {project-name} 프로젝트를 분석했어요
+## Analyzed {project-name}
 
-{project-name}은 **{main framework}** 기반 프로젝트네요.
+{project-name} is a **{main framework}** project.
 {Describe what you found in 1-2 natural sentences — mention key technologies, database, styling, etc. Be specific about versions when available.}
 
-이 스택에 딱 맞는 리소스를 찾았습니다:
+Here are the best matches for your stack:
 
 ---
 
 **1. {name}** `{resource_type}` · ⭐ {stars}
 > {description}
 
-📌 **추천 이유**: {Write 1-2 sentences explaining WHY this resource is useful for THIS specific project. Reference the actual dependencies or files you found. e.g., "package.json에 @supabase/supabase-js가 있고, supabase/ 디렉토리에 19개 SQL 파일이 있어서 Supabase를 적극 활용하고 계시네요. 이 스킬이 RLS 정책이나 쿼리 최적화에 도움이 됩니다."}
+📌 **Why this fits**: {Write 1-2 sentences explaining WHY this resource is useful for THIS specific project. Reference the actual dependencies or files you found. e.g., "You have @supabase/supabase-js in package.json and 19 SQL files in the supabase/ directory, so you're actively using Supabase. This skill helps with RLS policies and query optimization."}
 
 ```
 {install_command}
@@ -103,23 +103,24 @@ Output ONLY the result below (nothing else before it). Use a warm, conversationa
 
 ---
 
-## 설치하기
+## Install
 
-위 리소스 중 필요한 것을 바로 설치할 수 있습니다:
+Copy and run the commands you need:
 
 ```
 {install commands, one per line, only for skills — plugins/mcp show URLs instead}
 ```
 
-💡 **더 많은 리소스 둘러보기** → https://vibeindex.ai/browse
+💡 **Browse more** → https://vibeindex.ai/browse
 ```
 
 ### Writing style guidelines:
-- **Be specific**: Reference actual files, dependencies, and counts you found during analysis (e.g., ".tsx 파일 75개", "supabase/ 디렉토리", "react 19.2.3")
+- **Be specific**: Reference actual files, dependencies, and counts you found during analysis (e.g., "75 .tsx files", "supabase/ directory", "react 19.2.3")
 - **Be helpful**: Explain what each resource actually does for the user, not just what it is
 - **Be concise**: Each recommendation reason should be 1-2 sentences max
-- **Match score**: Show the match % in the recommendation reason naturally (e.g., "95% 일치") rather than as a separate bold line
+- **Match score**: Weave the match % into the reason naturally (e.g., "95% match") rather than as a separate bold line
 - **No jargon dumps**: Don't list raw field names or technical metadata
+- **Language**: The template above is in English as a base. You MUST translate everything into the user's detected language. For Korean users, also use `description_ko` from API responses when available.
 
 ### Install commands by type:
 - **skill**: `npx skills add {github_owner}/{github_repo} --skill {name}`
