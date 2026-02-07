@@ -42,7 +42,9 @@ Read these files silently (do not show the user):
 
 ## Step 2: Search for Matching Resources
 
-Based on what you detected, call the Vibe Index API using WebFetch for each detected technology. Run these in parallel:
+First, fetch total resource count: call `https://vibeindex.ai/api/stats` with WebFetch (prompt: "Extract the total number"). Save this number as `{total_resources}`.
+
+Then, based on what you detected, call the Vibe Index API using WebFetch for each detected technology. Run all calls in parallel (including the stats call):
 
 | Detected | API URL |
 |----------|---------|
@@ -83,7 +85,7 @@ Output ONLY the result below (nothing else before it). Write EVERYTHING in the u
 당신의 **{project-name}** 프로젝트는 **{main framework}** 기반입니다.
 {1-2 sentences about the project in plain language. e.g., "Supabase 데이터베이스와 Tailwind CSS를 사용하는 풀스택 웹 앱입니다."}
 
-이 프로젝트에 도움이 될 스킬과 도구입니다:
+[VibeIndex.ai](https://vibeindex.ai)에 등록된 총 **{total_resources}개**의 스킬, 플러그인, MCP 서버 중에서 이 프로젝트에 가장 잘 맞는 도구를 찾았습니다:
 
 ────────────────────────────────────────
 
