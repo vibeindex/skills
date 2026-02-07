@@ -75,22 +75,20 @@ Deduplicate results across all searches. Pick the top 5 highest-scoring resource
 
 ## Step 4: Present Results
 
-Output ONLY the result below (nothing else before it). Use a warm, conversational tone — like a knowledgeable colleague giving advice. Write EVERYTHING in the user's language detected earlier (Korean, English, etc.). Translate all headers, labels, descriptions, and explanations.
+Output ONLY the result below (nothing else before it). Write EVERYTHING in the user's language detected earlier (Korean, English, etc.). Translate all headers, labels, and explanations.
 
 ```
 ## 프로젝트 분석이 완료되었습니다
 
 당신의 **{project-name}** 프로젝트는 **{main framework}** 기반입니다.
-{Describe what you found in 1-2 natural sentences — mention key technologies, database, styling, etc. Be specific about versions when available.}
+{1-2 sentences about the project in plain language. e.g., "Supabase 데이터베이스와 Tailwind CSS를 사용하는 풀스택 웹 앱입니다."}
 
-Here are the best matches for your stack:
+이 프로젝트에 도움이 될 스킬과 도구입니다:
 
 ────────────────────────────────────────
 
 **1. {name}** `{resource_type}` · ⭐ {stars}
-> {description}
-
-📌 **Why this fits**: {Write 1-2 sentences explaining WHY this resource is useful for THIS specific project. Reference the actual dependencies or files you found. e.g., "You have @supabase/supabase-js in package.json and 19 SQL files in the supabase/ directory, so you're actively using Supabase. This skill helps with RLS policies and query optimization."}
+{One plain sentence about what this does FOR THE USER's project. NO technical jargon. e.g., "이 프로젝트에서 사용 중인 Supabase 데이터베이스를 더 빠르고 안전하게 만들어줍니다."}
 
 ```
 {install_command}
@@ -103,24 +101,24 @@ Here are the best matches for your stack:
 
 ────────────────────────────────────────
 
-## Install
+## 설치
 
-Copy and run the commands you need:
+필요한 것만 복사해서 실행하세요:
 
 ```
 {install commands, one per line, only for skills — plugins/mcp show URLs instead}
 ```
 
-💡 **Browse more** → https://vibeindex.ai
+💡 **더 많은 도구 탐색** → https://vibeindex.ai
 ```
 
 ### Writing style guidelines:
-- **Be specific**: Reference actual files, dependencies, and counts you found during analysis (e.g., "75 .tsx files", "supabase/ directory", "react 19.2.3")
-- **Be helpful**: Explain what each resource actually does for the user, not just what it is
-- **Be concise**: Each recommendation reason should be 1-2 sentences max
-- **Match score**: Weave the match % into the reason naturally (e.g., "95% match") rather than as a separate bold line
-- **No jargon dumps**: Don't list raw field names or technical metadata
-- **Language**: The template above is in English as a base. You MUST translate everything into the user's detected language. For Korean users, also use `description_ko` from API responses when available.
+- **SIMPLE LANGUAGE ONLY**: Write like you're explaining to a friend, not a developer docs page. No jargon like "RLS 정책", "인덱싱", "쿼리 최적화", "번들 최적화". Instead say what it DOES: "더 빠르게", "더 안전하게", "코드를 깔끔하게", "버그를 줄여줍니다"
+- **Focus on benefit**: Don't explain HOW it matches (no "package.json에 X가 있고..."). Just say what the user GETS.
+- **One sentence per recommendation**: Each description should be exactly one plain sentence. No bullet points, no technical details.
+- **No match percentages**: Do not show match scores or percentages to the user.
+- **No description from API**: Do NOT use the raw `description` or `description_ko` from the API response. Write your own simple sentence based on what the resource does for THIS project.
+- **Language**: Translate everything into the user's detected language. The template above is Korean as a base.
 
 ### Install commands by type:
 - **skill**: `npx skills add {github_owner}/{github_repo} --skill {name}`
