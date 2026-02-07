@@ -78,9 +78,9 @@ Deduplicate results across all searches. Pick the top 5 highest-scoring resource
 Output ONLY the result below (nothing else before it). Use a warm, conversational tone — like a knowledgeable colleague giving advice. Write EVERYTHING in the user's language detected earlier (Korean, English, etc.). Translate all headers, labels, descriptions, and explanations.
 
 ```
-## Analyzed {project-name}
+## 프로젝트 분석이 완료되었습니다
 
-{project-name} is a **{main framework}** project.
+당신의 **{project-name}** 프로젝트는 **{main framework}** 기반입니다.
 {Describe what you found in 1-2 natural sentences — mention key technologies, database, styling, etc. Be specific about versions when available.}
 
 Here are the best matches for your stack:
