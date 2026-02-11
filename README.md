@@ -6,7 +6,7 @@ Official Claude Code skills from [Vibe Index](https://vibeindex.ai) - the compre
 
 | Skill | Command | Description |
 |-------|---------|-------------|
-| **vibe** | `/vibe` | Analyze your project and get personalized recommendations |
+| **vibeindex** | `/vibeindex` | Analyze your project and get personalized recommendations |
 | **rising** | `/rising` | Discover trending resources on GitHub |
 | **versus** | `/versus A B` | Compare two resources side-by-side |
 | **ecosystem** | `/ecosystem` | Dashboard view of the Claude Code ecosystem |
@@ -21,7 +21,7 @@ npx skills add vibeindex/skills
 
 ### Install Individual Skills
 ```bash
-npx skills add vibeindex/skills --skill vibe
+npx skills add vibeindex/skills --skill vibeindex
 npx skills add vibeindex/skills --skill rising
 npx skills add vibeindex/skills --skill versus
 npx skills add vibeindex/skills --skill ecosystem
@@ -32,7 +32,7 @@ npx skills add vibeindex/skills --skill new
 
 ```bash
 # Analyze your project
-/vibe
+/vibeindex
 
 # See what's trending
 /rising

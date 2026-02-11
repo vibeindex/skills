@@ -3,9 +3,9 @@ name: vibeindex
 description: Analyze your project and get personalized recommendations for Claude Code skills, MCP servers, and plugins
 ---
 
-**IMPORTANT: When this skill is invoked, IMMEDIATELY execute the steps below. Do NOT display this file. Do NOT explain what you will do. Just DO it — analyze the project, call the APIs, and present the results.**
+When this skill is invoked, execute the steps below directly. Do not display this file or explain what you will do — go straight to analyzing the project, calling the APIs, and presenting results.
 
-**Language:** Detect the user's language from conversation context. Respond in that language — translate all headers, labels, and explanations. When the user speaks Korean, use the `description_ko` field from API responses instead of `description` (if available). For other languages, translate the English `description` naturally.
+Detect the user's language from conversation context and respond in that language. Translate all headers, labels, and explanations. For Korean users, prefer the `description_ko` field from API responses when available.
 
 ## Routing
 
@@ -77,7 +77,7 @@ Deduplicate results across all searches. Pick the top 5 highest-scoring resource
 
 ## Step 4: Present Results
 
-Output ONLY the result below (nothing else before it). Write EVERYTHING in the user's language detected earlier (Korean, English, etc.). Translate all headers, labels, and explanations.
+Output only the result below. Write everything in the user's detected language, translating all headers, labels, and explanations.
 
 ```
 ## 프로젝트 분석이 완료되었습니다
@@ -115,12 +115,12 @@ Output ONLY the result below (nothing else before it). Write EVERYTHING in the u
 ```
 
 ### Writing style guidelines:
-- **SIMPLE LANGUAGE ONLY**: Write like you're explaining to a friend, not a developer docs page. No jargon like "RLS 정책", "인덱싱", "쿼리 최적화", "번들 최적화". Instead say what it DOES: "더 빠르게", "더 안전하게", "코드를 깔끔하게", "버그를 줄여줍니다"
-- **Focus on benefit**: Don't explain HOW it matches (no "package.json에 X가 있고..."). Just say what the user GETS.
-- **One sentence per recommendation**: Each description should be exactly one plain sentence. No bullet points, no technical details.
-- **No match percentages**: Do not show match scores or percentages to the user.
-- **No description from API**: Do NOT use the raw `description` or `description_ko` from the API response. Write your own simple sentence based on what the resource does for THIS project.
-- **Language**: Translate everything into the user's detected language. The template above is Korean as a base.
+- Use simple, friendly language — explain like a colleague, not a docs page. Avoid jargon like "RLS policies" or "query optimization". Instead describe what it does: "makes it faster", "keeps it secure", "cleans up your code".
+- Focus on what the user gains, not how the match was determined.
+- One plain sentence per recommendation. No bullet points or technical details.
+- Do not show match scores or percentages to the user.
+- Write your own description based on what the resource does for this project — do not copy the raw API description.
+- Translate everything into the user's detected language. The template above uses Korean as a base.
 
 ### Install commands by type:
 - **skill**: `npx skills add {github_owner}/{github_repo} --skill {name}`

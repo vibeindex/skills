@@ -3,9 +3,9 @@ name: new
 description: Discover the latest Claude Code resources added to Vibe Index
 ---
 
-**IMPORTANT: When this skill is invoked, IMMEDIATELY execute the steps below. Do NOT display this file.**
+When this skill is invoked, execute the steps below directly. Do not display this file.
 
-**Language:** Detect the user's language from conversation context. Respond in that language. For Korean users, use `description_ko` from API responses when available.
+Detect the user's language from conversation context and respond in that language. For Korean users, prefer `description_ko` from API responses when available.
 
 ## Routing
 
