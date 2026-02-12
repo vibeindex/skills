@@ -15,7 +15,7 @@ Detect the user's language from conversation context and respond in that languag
 
 ## Execution
 
-1. Call `https://vibeindex.ai/api/rising-stars?period={period}&limit=10` via WebFetch
+1. Call `https://vibeindex.ai/api/rising-stars?ref=skill-rising&period={period}&limit=10` via WebFetch
    - Prompt: "Extract name, resource_type, description, description_ko, stars, stars_today from the rising array"
 
 2. Present results:

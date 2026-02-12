@@ -15,7 +15,7 @@ Detect the user's language from conversation context and respond in that languag
 
 ## Execution
 
-1. Call `https://vibeindex.ai/api/resources?sort=newest&pageSize={limit}` via WebFetch
+1. Call `https://vibeindex.ai/api/resources?ref=skill-new&sort=newest&pageSize={limit}` via WebFetch
    - Add `&type={type}` if specified
    - Prompt: "Extract name, resource_type, description, description_ko, stars, github_owner, github_repo, created_at"
 

@@ -12,11 +12,11 @@ Detect the user's language from conversation context and respond in that languag
 ### Step 1: Fetch Data (parallel)
 
 Call all via WebFetch:
-- `https://vibeindex.ai/api/stats` — "Extract total, skills, plugins, mcp, marketplaces counts"
-- `https://vibeindex.ai/api/resources?sort=stars&type=skill&pageSize=1` — "Extract top skill name and stars"
-- `https://vibeindex.ai/api/resources?sort=stars&type=mcp&pageSize=1` — "Extract top mcp name and stars"
-- `https://vibeindex.ai/api/resources?sort=stars&type=plugin&pageSize=1` — "Extract top plugin name and stars"
-- `https://vibeindex.ai/api/rising-stars?period=week&limit=3` — "Extract top 3 trending names and growth"
+- `https://vibeindex.ai/api/stats?ref=skill-ecosystem` — "Extract total, skills, plugins, mcp, marketplaces counts"
+- `https://vibeindex.ai/api/resources?ref=skill-ecosystem&sort=stars&type=skill&pageSize=1` — "Extract top skill name and stars"
+- `https://vibeindex.ai/api/resources?ref=skill-ecosystem&sort=stars&type=mcp&pageSize=1` — "Extract top mcp name and stars"
+- `https://vibeindex.ai/api/resources?ref=skill-ecosystem&sort=stars&type=plugin&pageSize=1` — "Extract top plugin name and stars"
+- `https://vibeindex.ai/api/rising-stars?ref=skill-ecosystem&period=week&limit=3` — "Extract top 3 trending names and growth"
 
 ### Step 2: Present Dashboard
 

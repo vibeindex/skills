@@ -12,9 +12,9 @@ Detect the user's language from conversation context and respond in that languag
 Parse the user's command and route to the correct action:
 
 - `/vibeindex` → **Action: Analyze** (run Steps 1-4 below)
-- `/vibeindex search <query>` → **Action: Search** (call `https://vibeindex.ai/api/resources?search={query}&pageSize=10`, present results)
-- `/vibeindex top [type]` → **Action: Top** (call `https://vibeindex.ai/api/resources?sort=stars&pageSize=10` or add `&type={type}`, present results)
-- `/vibeindex trending` → **Action: Trending** (call `https://vibeindex.ai/api/rising-stars?period=week&limit=10`, present results)
+- `/vibeindex search <query>` → **Action: Search** (call `https://vibeindex.ai/api/resources?ref=skill-vibeindex&search={query}&pageSize=10`, present results)
+- `/vibeindex top [type]` → **Action: Top** (call `https://vibeindex.ai/api/resources?ref=skill-vibeindex&sort=stars&pageSize=10` or add `&type={type}`, present results)
+- `/vibeindex trending` → **Action: Trending** (call `https://vibeindex.ai/api/rising-stars?ref=skill-vibeindex&period=week&limit=10`, present results)
 
 For search/top/trending: Use WebFetch to call the API, then format results as a numbered markdown list showing name, type, description, stars, and install command. Then stop.
 
@@ -42,20 +42,20 @@ Read these files silently (do not show the user):
 
 ## Step 2: Search for Matching Resources
 
-First, fetch total resource count: call `https://vibeindex.ai/api/stats` with WebFetch (prompt: "Extract the total number"). Save this number as `{total_resources}`.
+First, fetch total resource count: call `https://vibeindex.ai/api/stats?ref=skill-vibeindex` with WebFetch (prompt: "Extract the total number"). Save this number as `{total_resources}`.
 
 Then, based on what you detected, call the Vibe Index API using WebFetch for each detected technology. Run all calls in parallel (including the stats call):
 
 | Detected | API URL |
 |----------|---------|
-| React | `https://vibeindex.ai/api/resources?search=react&pageSize=5` |
-| TypeScript | `https://vibeindex.ai/api/resources?search=typescript&pageSize=5` |
-| Supabase | `https://vibeindex.ai/api/resources?search=supabase&pageSize=5` |
-| Next.js | `https://vibeindex.ai/api/resources?search=nextjs&pageSize=5` |
-| Docker | `https://vibeindex.ai/api/resources?search=docker&pageSize=5` |
-| Python | `https://vibeindex.ai/api/resources?search=python&pageSize=5` |
-| Tailwind | `https://vibeindex.ai/api/resources?search=tailwind&pageSize=5` |
-| Prisma | `https://vibeindex.ai/api/resources?search=prisma&pageSize=5` |
+| React | `https://vibeindex.ai/api/resources?ref=skill-vibeindex&search=react&pageSize=5` |
+| TypeScript | `https://vibeindex.ai/api/resources?ref=skill-vibeindex&search=typescript&pageSize=5` |
+| Supabase | `https://vibeindex.ai/api/resources?ref=skill-vibeindex&search=supabase&pageSize=5` |
+| Next.js | `https://vibeindex.ai/api/resources?ref=skill-vibeindex&search=nextjs&pageSize=5` |
+| Docker | `https://vibeindex.ai/api/resources?ref=skill-vibeindex&search=docker&pageSize=5` |
+| Python | `https://vibeindex.ai/api/resources?ref=skill-vibeindex&search=python&pageSize=5` |
+| Tailwind | `https://vibeindex.ai/api/resources?ref=skill-vibeindex&search=tailwind&pageSize=5` |
+| Prisma | `https://vibeindex.ai/api/resources?ref=skill-vibeindex&search=prisma&pageSize=5` |
 
 For each WebFetch call, use this prompt: "Extract name, resource_type, description, stars, github_owner, github_repo from the data array"
 

@@ -14,8 +14,8 @@ When comparing A vs B:
 ### Step 1: Search Both Resources (parallel)
 
 Call via WebFetch:
-- `https://vibeindex.ai/api/resources?search={A}&pageSize=3`
-- `https://vibeindex.ai/api/resources?search={B}&pageSize=3`
+- `https://vibeindex.ai/api/resources?ref=skill-versus&search={A}&pageSize=3`
+- `https://vibeindex.ai/api/resources?ref=skill-versus&search={B}&pageSize=3`
 
 Prompt: "Extract name, resource_type, description, description_ko, stars, github_owner, github_repo, tags"
 
